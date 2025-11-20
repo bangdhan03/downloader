@@ -1,0 +1,31 @@
+
+import '@angular/compiler';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { AppComponent } from './src/app.component';
+import { BottomNavComponent } from './src/components/bottom-nav/bottom-nav.component';
+import { LoaderComponent } from './src/components/loader/loader.component';
+import { NavbarComponent } from './src/components/navbar/navbar.component';
+import { SideNavComponent } from './src/components/side-nav/side-nav.component';
+
+// Prevent aggressive tree-shaking in custom build environments
+// by creating an explicit side-effect.
+if (typeof window !== 'undefined') {
+  (window as any)._APP_COMPONENTS = [
+    AppComponent,
+    BottomNavComponent,
+    LoaderComponent,
+    NavbarComponent,
+    SideNavComponent,
+  ];
+}
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZonelessChangeDetection(),
+    provideHttpClient(withFetch())
+  ]
+}).catch(err => console.error(err));
+
+// AI Studio always uses an `index.tsx` file for all project types.

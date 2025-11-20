@@ -1,0 +1,676 @@
+<div class="min-h-screen flex flex-col text-gray-700 antialiased bg-[#e0e5ec]">
+  <!-- New Top Navbar -->
+  <app-navbar [title]="pageTitle()" (menuClick)="toggleSideNav()"></app-navbar>
+
+  <!-- New Side Navigation Panel -->
+  <app-side-nav 
+    [isOpen]="isSideNavOpen()" 
+    (itemSelected)="handleSideNavSelection($event)"
+    (close)="closeSideNav()">
+  </app-side-nav>
+
+  <!-- Main Content -->
+  <main class="pt-20 p-4 flex-grow flex flex-col pb-24" 
+        [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()" 
+        [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
+        [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi() || homeViewMode() === 'downloader'">
+
+    @switch (activeView()) {
+      @case ('home') {
+        @if (homeViewMode() === 'downloader') {
+          <!-- Input Form -->
+          <div class="w-full max-w-md space-y-6">
+            <header class="text-center mb-6">
+                <img ngSrc="https://images.weserv.nl/?url=files.catbox.moe/t52zxc.jpg&w=172&h=172&fit=cover" alt="Xyooly Downloader Logo" width="100" height="100" class="mx-auto rounded-full shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] p-2" priority>
+                <p class="text-gray-500 mt-4">Unduh video, audio & edit gambar dengan mudah</p>
+            </header>
+            <div class="relative">
+              <input
+                #urlInput
+                (input)="url.set(urlInput.value)"
+                [value]="url()"
+                type="text"
+                [placeholder]="urlPlaceholder()"
+                class="w-full px-5 py-4 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]"
+              >
+            </div>
+            <button (click)="downloadContent()" [disabled]="loading() || !url()"
+              class="w-full py-4 rounded-full font-semibold text-lg text-gray-800 transition-all duration-200 ease-in-out
+                    bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]
+                    active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]
+                    disabled:opacity-50 disabled:cursor-not-allowed">
+              @if (loading()) {
+                <span>Memuat...</span>
+              } @else {
+                <span>Unduh</span>
+              }
+            </button>
+          </div>
+
+          <!-- Supported Platforms -->
+          <div class="mt-8 w-full max-w-md">
+            <p class="text-center text-sm text-gray-500 mb-4">Platform yang Didukung</p>
+            <div class="grid grid-cols-3 gap-4">
+              @for (platform of supportedPlatforms; track platform.name) {
+                <button type="button" (click)="selectPlatform(platform.name)"
+                  class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 group focus:outline-none">
+                  
+                  @switch(platform.iconName) {
+                    @case('TikTok') {
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" class="h-10 w-10 transition-transform group-hover:scale-110" [class]="platform.color"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+                    }
+                    @case('YouTube') {
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-10 w-10 transition-transform group-hover:scale-110" [class]="platform.color"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    }
+                    @case('Instagram') {
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-10 w-10 transition-transform group-hover:scale-110" [class]="platform.color">
+                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372.527-.205.973-.478 1.417-.923.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 8 0zm0 1.442c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.282.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.282.11-.705.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.231 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.275-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705.24 1.485-.276.843-.038 1.096-.047 3.232-.047zM8 4.865a3.135 3.135 0 1 0 0 6.27 3.135 3.135 0 0 0 0-6.27zM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4.5-5.23a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5z"/>
+                      </svg>
+                    }
+                    @case('Facebook') {
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-10 w-10 transition-transform group-hover:scale-110" [class]="platform.color"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-1.5c-1 0-1.5.5-1.5 1.5V12h3l-.5 3h-2.5v6.8c4.56-.93 8-4.96 8-9.8c0-5.52-4.48-10-10-10z"/></svg>
+                    }
+                    @case('Spotify') {
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-10 w-10 transition-transform group-hover:scale-110" [class]="platform.color"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.183 14.122a.499.499 0 0 1-.617.208c-2.665-1.635-6.033-1.99-9.983-1.09a.5.5 0 0 1-.562-.438.5.5 0 0 1 .438-.562c4.21-.953 7.848-.562 10.74 1.22a.5.5 0 0 1 .208.617zm.88-2.31c-.22.31-.64.408-.948.19c-3.13-1.9-7.02-2.43-11.04-1.34a.625.625 0 0 1-.698-.545.625.625 0 0 1 .545-.698c4.32-1.155 8.52-.57 11.95 1.52a.623.623 0 0 1 .19.948zm.13-2.536c-.274.385-.798.51-1.182.236-3.53-2.17-8.22-2.82-12.23-1.55a.75.75 0 0 1-.82-.67c-.08-.415.24-.78.65-.86c4.35-1.35 9.39-.64 13.29 1.8a.75.75 0 0 1 .235 1.18z"/></svg>
+                    }
+                    @case('Mediafire') {
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-10 w-10 transition-transform group-hover:scale-110" [class]="platform.color"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                    }
+                  }
+                  
+                  <span class="mt-2 text-xs font-medium text-gray-700">{{ platform.name }}</span>
+                </button>
+              }
+            </div>
+          </div>
+          
+          <!-- Error Message -->
+          @if (error()) {
+            <div class="mt-8 w-full max-w-md p-4 rounded-xl bg-red-100 text-red-700 shadow-[inset_6px_6px_12px_#c9d1d9,inset_-6px_-6px_12px_#f7f9fd]">
+              <p class="font-medium">Oops! Terjadi kesalahan.</p>
+              <p class="text-sm">{{ error() }}</p>
+            </div>
+          }
+
+          <!-- Results -->
+          @if (loading()) {
+            <div class="mt-8 w-full max-w-md">
+              <app-loader></app-loader>
+            </div>
+          } @else if (downloadResult(); as result) {
+            <div class="mt-8 w-full max-w-md bg-[#e0e5ec] rounded-2xl p-4 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]">
+              <div class="flex items-center space-x-4">
+                <img [ngSrc]="result.thumbnail" alt="Thumbnail" width="96" height="96" class="w-24 h-24 object-cover rounded-lg shadow-md">
+                <div class="flex-1">
+                  <h3 class="font-bold text-lg leading-tight line-clamp-2">{{ result.title }}</h3>
+                  @if (result.duration) {
+                    <p class="text-sm text-gray-500 mt-1">Durasi: {{ result.duration }}</p>
+                  }
+                </div>
+              </div>
+
+              <!-- Preview Players -->
+              <div class="mt-4 space-y-4">
+                @if (videoPreview(); as p) {
+                  <div>
+                    <h4 class="font-semibold mb-2 text-sm text-gray-600">Pratinjau Video:</h4>
+                    <div class="p-2 bg-[#e0e5ec] rounded-2xl shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+                      <video [src]="p.url" [poster]="result.thumbnail" controls preload="metadata" class="w-full rounded-lg"></video>
+                    </div>
+                  </div>
+                }
+                @if (audioPreview(); as p) {
+                  <div>
+                    <h4 class="font-semibold mb-2 text-sm text-gray-600">Pratinjau Audio:</h4>
+                    <div class="p-2 bg-[#e0e5ec] rounded-2xl shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+                      <audio [src]="p.url" controls preload="metadata" class="w-full"></audio>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <div class="mt-6">
+                <h4 class="font-semibold mb-3">Opsi Unduhan:</h4>
+                <div class="grid grid-cols-2 gap-4">
+                  @for (option of result.options; track option.url) {
+                    <a [href]="option.url" [attr.download]="option.filename || createFileName(result.title, option)" target="_blank" rel="noopener noreferrer"
+                      class="block text-center p-3 rounded-lg bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-shadow duration-200">
+                      <span class="font-medium text-sm">{{ option.label }}</span>
+                      <span class="block text-xs text-gray-500">{{ option.quality }}</span>
+                    </a>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        } @else if (homeViewMode() === 'search') {
+          <!-- Search View -->
+          <div class="w-full max-w-md">
+            <!-- Search Input Form -->
+            <div class="space-y-4">
+              <div class="relative">
+                <input #searchInput (input)="searchQuery.set(searchInput.value)" [value]="searchQuery()"
+                      type="text" placeholder="Masukkan kata kunci..."
+                      class="w-full px-5 py-4 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+              </div>
+
+              <!-- Search Type Selector -->
+              <div class="flex flex-wrap justify-center gap-2">
+                <button (click)="searchType.set('pinterest')"
+                        class="px-4 py-2 rounded-full font-medium transition-all duration-200 text-sm"
+                        [class.text-blue-600]="searchType() === 'pinterest'"
+                        [class.shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6]]="searchType() === 'pinterest'"
+                        [class.text-gray-600]="searchType() !== 'pinterest'">
+                  Pinterest
+                </button>
+                <button (click)="searchType.set('happymod')"
+                        class="px-4 py-2 rounded-full font-medium transition-all duration-200 text-sm"
+                        [class.text-blue-600]="searchType() === 'happymod'"
+                        [class.shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6]]="searchType() === 'happymod'"
+                        [class.text-gray-600]="searchType() !== 'happymod'">
+                  Happymod
+                </button>
+                <button (click)="searchType.set('spotify')"
+                        class="px-4 py-2 rounded-full font-medium transition-all duration-200 text-sm"
+                        [class.text-blue-600]="searchType() === 'spotify'"
+                        [class.shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6]]="searchType() === 'spotify'"
+                        [class.text-gray-600]="searchType() !== 'spotify'">
+                  Spotify
+                </button>
+                <button (click)="searchType.set('youtube')"
+                        class="px-4 py-2 rounded-full font-medium transition-all duration-200 text-sm"
+                        [class.text-blue-600]="searchType() === 'youtube'"
+                        [class.shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6]]="searchType() === 'youtube'"
+                        [class.text-gray-600]="searchType() !== 'youtube'">
+                  YouTube
+                </button>
+                <button (click)="searchType.set('tiktok')"
+                        class="px-4 py-2 rounded-full font-medium transition-all duration-200 text-sm"
+                        [class.text-blue-600]="searchType() === 'tiktok'"
+                        [class.shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6]]="searchType() === 'tiktok'"
+                        [class.text-gray-600]="searchType() !== 'tiktok'">
+                  TikTok
+                </button>
+              </div>
+
+              <button (click)="searchContent()" [disabled]="searchLoading() || !searchQuery()"
+                      class="w-full py-4 rounded-full font-semibold text-lg text-gray-800 transition-all duration-200 ease-in-out bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff] disabled:opacity-50 disabled:cursor-not-allowed">
+                @if (searchLoading()) {
+                  <span>Mencari...</span>
+                } @else {
+                  <span>Cari</span>
+                }
+              </button>
+            </div>
+            
+            <!-- Search Error Message -->
+            @if (searchError()) {
+              <div class="mt-8 w-full p-4 rounded-xl bg-red-100 text-red-700 shadow-[inset_6px_6px_12px_#c9d1d9,inset_-6px_-6px_12px_#f7f9fd]">
+                <p class="font-medium">Oops! Terjadi kesalahan.</p>
+                <p class="text-sm">{{ searchError() }}</p>
+              </div>
+            }
+
+            <!-- Search Results -->
+            <div class="mt-8 space-y-4">
+              @if (searchLoading()) {
+                <app-loader></app-loader>
+              } @else {
+                @if (pinterestResults(); as results) {
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    @for (item of results; track item.pin_url) {
+                      <div class="bg-[#e0e5ec] rounded-2xl p-2 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] group">
+                        <div class="relative">
+                          <img [ngSrc]="item.image_url" [alt]="item.title" width="200" height="160" class="w-full h-40 object-cover rounded-lg">
+                          <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                            <a [href]="item.image_url" [attr.download]="createImageFileName(item.title)" target="_blank" rel="noopener noreferrer" class="p-3 rounded-full bg-white/30 backdrop-blur-sm text-white shadow-lg">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            </a>
+                          </div>
+                        </div>
+                        <p class="text-xs font-medium mt-2 truncate text-gray-700">{{ item.title }}</p>
+                        <p class="text-xs text-gray-500 truncate">by {{ item.author.username }}</p>
+                      </div>
+                    }
+                  </div>
+                }
+                @if (happymodResults(); as results) {
+                  <div class="space-y-4">
+                    @for (item of results; track item.package) {
+                      <div class="bg-[#e0e5ec] rounded-2xl p-4 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] flex items-center space-x-4">
+                        <div class="flex-1 min-w-0">
+                          <p class="font-bold text-gray-800 truncate">{{ item.title }}</p>
+                          <p class="text-sm text-gray-600">v{{ item.version }} • {{ item.size }}</p>
+                          @if(item.modInfo) {
+                            <p class="text-xs text-green-600 mt-1 font-medium truncate">{{ item.modInfo }}</p>
+                          }
+                        </div>
+                        <a [href]="item.page_dl" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 p-3 rounded-full bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-shadow duration-200">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 9.707a1 1 0 011.414 0L9 11.086V3a1 1 0 112 0v8.086l1.293-1.379a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                          </svg>
+                        </a>
+                      </div>
+                    }
+                  </div>
+                }
+                @if (spotifyResults(); as results) {
+                  <div class="space-y-4">
+                    @for (item of results; track item.track_url) {
+                      <div class="bg-[#e0e5ec] rounded-2xl p-3 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] flex items-center space-x-4">
+                        <img [ngSrc]="item.thumbnail" [alt]="item.title" width="64" height="64" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+                        <div class="flex-1 min-w-0">
+                          <p class="font-bold text-gray-800 truncate">{{ item.title }}</p>
+                          <p class="text-sm text-gray-600 truncate">{{ item.artist }}</p>
+                          <p class="text-xs text-gray-500">{{ item.duration }}</p>
+                        </div>
+                        <button (click)="downloadContent(item.track_url)" class="flex-shrink-0 p-3 rounded-full bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-shadow duration-200">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 9.707a1 1 0 011.414 0L9 11.086V3a1 1 0 112 0v8.086l1.293-1.379a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
+                @if (youtubeResults(); as results) {
+                  <div class="space-y-4">
+                    @for (item of results; track item.link) {
+                      <div class="bg-[#e0e5ec] rounded-2xl p-3 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] flex items-center space-x-4">
+                        <img [ngSrc]="item.imageUrl" [alt]="item.title" width="120" height="68" class="w-24 aspect-video object-cover rounded-lg flex-shrink-0">
+                        <div class="flex-1 min-w-0">
+                          <p class="font-bold text-sm text-gray-800 line-clamp-2">{{ item.title }}</p>
+                          <p class="text-xs text-gray-600 truncate mt-1">{{ item.channel }} • {{ item.duration }}</p>
+                        </div>
+                        <button (click)="downloadContent(item.link)" class="flex-shrink-0 p-3 rounded-full bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-shadow duration-200">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 9.707a1 1 0 011.414 0L9 11.086V3a1 1 0 112 0v8.086l1.293-1.379a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
+                @if (tiktokResults(); as results) {
+                  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    @for (item of results; track item.video_id) {
+                      <div class="bg-[#e0e5ec] rounded-2xl p-2 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] group">
+                        <div class="relative">
+                          <img [ngSrc]="item.cover" [alt]="item.title" width="200" height="250" class="w-full h-48 object-cover rounded-lg">
+                          <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                            <button (click)="downloadContent('https://www.tiktok.com/@' + item.author.unique_id + '/video/' + item.video_id)" class="p-3 rounded-full bg-white/30 backdrop-blur-sm text-white shadow-lg">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            </button>
+                          </div>
+                        </div>
+                        <p class="text-xs font-medium mt-2 truncate text-gray-700">{{ item.title || 'TikTok Video' }}</p>
+                        <p class="text-xs text-gray-500 truncate">by {{ item.author.nickname }}</p>
+                      </div>
+                    }
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        } @else if (homeViewMode() === 'edits') {
+          <div class="w-full max-w-md space-y-8">
+            <!-- Remove Background Card -->
+            <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] space-y-4">
+              <h3 class="font-bold text-lg">Hapus Latar Belakang</h3>
+              <div class="relative">
+                <input #removeBgInput (input)="removeBgImageUrl.set(removeBgInput.value)" [value]="removeBgImageUrl()"
+                  type="text" placeholder="Tempel URL gambar di sini..."
+                  class="w-full px-5 py-3 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+              </div>
+              <button (click)="performRemoveBg()" [disabled]="removeBgLoading() || !removeBgImageUrl()"
+                class="w-full py-3 rounded-full font-semibold text-gray-800 transition-all duration-200 ease-in-out bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff] disabled:opacity-50 disabled:cursor-not-allowed">
+                @if (removeBgLoading()) {
+                  <span>Memproses...</span>
+                } @else {
+                  <span>Hapus LBG</span>
+                }
+              </button>
+              
+              @if (removeBgError()) {
+                <div class="p-3 rounded-lg bg-red-100 text-red-700 text-sm shadow-[inset_4px_4px_8px_#c9d1d9,inset_-4px_-4px_8px_#f7f9fd]">
+                  {{ removeBgError() }}
+                </div>
+              }
+  
+              @if (removeBgResult(); as result) {
+                <div class="space-y-4">
+                  <p class="text-sm font-medium text-center text-gray-600">Hasil:</p>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <h4 class="text-xs text-center font-semibold mb-2">Original</h4>
+                      <img [ngSrc]="result.original" alt="Original" width="150" height="150" class="rounded-lg w-full object-contain shadow-md">
+                    </div>
+                    <div>
+                      <h4 class="text-xs text-center font-semibold mb-2">Tanpa Latar</h4>
+                      <img [ngSrc]="result.cutout" alt="Cutout" width="150" height="150" class="rounded-lg w-full object-contain shadow-md bg-white p-1">
+                    </div>
+                  </div>
+                  <a [href]="result.cutout" [attr.download]="'removed-bg.png'" target="_blank" rel="noopener noreferrer"
+                    class="block text-center w-full py-3 rounded-full font-semibold text-sm text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200 shadow-md">
+                    Unduh Hasil
+                  </a>
+                </div>
+              }
+            </div>
+  
+            <!-- Remini Card -->
+            <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] space-y-4">
+              <h3 class="font-bold text-lg">Tingkatkan Kualitas (Remini)</h3>
+              <div class="relative">
+                 <input #reminiInput (input)="reminiImageUrl.set(reminiInput.value)" [value]="reminiImageUrl()"
+                  type="text" placeholder="Tempel URL gambar di sini..."
+                  class="w-full px-5 py-3 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+              </div>
+              <button (click)="performRemini()" [disabled]="reminiLoading() || !reminiImageUrl()"
+                class="w-full py-3 rounded-full font-semibold text-gray-800 transition-all duration-200 ease-in-out bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff] disabled:opacity-50 disabled:cursor-not-allowed">
+                @if (reminiLoading()) {
+                  <span>Memproses...</span>
+                } @else {
+                  <span>Tingkatkan</span>
+                }
+              </button>
+  
+              @if (reminiError()) {
+                <div class="p-3 rounded-lg bg-red-100 text-red-700 text-sm shadow-[inset_4px_4px_8px_#c9d1d9,inset_-4px_-4px_8px_#f7f9fd]">
+                  {{ reminiError() }}
+                </div>
+              }
+  
+              @if (reminiResult(); as result) {
+                <div class="space-y-4">
+                  <p class="text-sm font-medium text-center text-gray-600">Hasil:</p>
+                  <img [ngSrc]="result.result" alt="Remini Result" width="300" height="300" class="rounded-lg w-full object-contain shadow-md">
+                   <a [href]="result.result" [attr.download]="'remini_result.png'" target="_blank" rel="noopener noreferrer"
+                    class="block text-center w-full py-3 rounded-full font-semibold text-sm text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200 shadow-md">
+                    Unduh Hasil
+                  </a>
+                </div>
+              }
+            </div>
+  
+            <!-- Tobotak Card -->
+            <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] space-y-4">
+              <h3 class="font-bold text-lg">Jadikan Botak</h3>
+              <div class="relative">
+                 <input #tobotakInput (input)="tobotakImageUrl.set(tobotakInput.value)" [value]="tobotakImageUrl()"
+                  type="text" placeholder="Tempel URL gambar di sini..."
+                  class="w-full px-5 py-3 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+              </div>
+              <button (click)="performTobotak()" [disabled]="tobotakLoading() || !tobotakImageUrl()"
+                class="w-full py-3 rounded-full font-semibold text-gray-800 transition-all duration-200 ease-in-out bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff] disabled:opacity-50 disabled:cursor-not-allowed">
+                @if (tobotakLoading()) {
+                  <span>Memproses...</span>
+                } @else {
+                  <span>Proses</span>
+                }
+              </button>
+  
+              @if (tobotakError()) {
+                <div class="p-3 rounded-lg bg-red-100 text-red-700 text-sm shadow-[inset_4px_4px_8px_#c9d1d9,inset_-4px_-4px_8px_#f7f9fd]">
+                  {{ tobotakError() }}
+                </div>
+              }
+  
+              @if (tobotakResult(); as result) {
+                <div class="space-y-4">
+                  <p class="text-sm font-medium text-center text-gray-600">Hasil:</p>
+                  <img [ngSrc]="result.result" alt="Tobotak Result" width="300" height="300" class="rounded-lg w-full object-contain shadow-md">
+                   <a [href]="result.result" [attr.download]="'tobotak_result.png'" target="_blank" rel="noopener noreferrer"
+                    class="block text-center w-full py-3 rounded-full font-semibold text-sm text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200 shadow-md">
+                    Unduh Hasil
+                  </a>
+                </div>
+              }
+            </div>
+  
+            <!-- Tofigure Card -->
+            <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] space-y-4">
+              <h3 class="font-bold text-lg">Ubah Jadi Figure</h3>
+              <div class="relative">
+                 <input #tofigureInput (input)="tofigureImageUrl.set(tofigureInput.value)" [value]="tofigureImageUrl()"
+                  type="text" placeholder="Tempel URL gambar di sini..."
+                  class="w-full px-5 py-3 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+              </div>
+              <button (click)="performTofigure()" [disabled]="tofigureLoading() || !tofigureImageUrl()"
+                class="w-full py-3 rounded-full font-semibold text-gray-800 transition-all duration-200 ease-in-out bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff] disabled:opacity-50 disabled:cursor-not-allowed">
+                @if (tofigureLoading()) {
+                  <span>Memproses...</span>
+                } @else {
+                  <span>Proses</span>
+                }
+              </button>
+  
+              @if (tofigureError()) {
+                <div class="p-3 rounded-lg bg-red-100 text-red-700 text-sm shadow-[inset_4px_4px_8px_#c9d1d9,inset_-4px_-4px_8px_#f7f9fd]">
+                  {{ tofigureError() }}
+                </div>
+              }
+  
+              @if (tofigureResult(); as result) {
+                <div class="space-y-4">
+                  <p class="text-sm font-medium text-center text-gray-600">Hasil:</p>
+                  <img [ngSrc]="result.result" alt="Tofigure Result" width="300" height="300" class="rounded-lg w-full object-contain shadow-md">
+                   <a [href]="result.result" [attr.download]="'tofigure_result.png'" target="_blank" rel="noopener noreferrer"
+                    class="block text-center w-full py-3 rounded-full font-semibold text-sm text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200 shadow-md">
+                    Unduh Hasil
+                  </a>
+                </div>
+              }
+            </div>
+  
+            <!-- Tozombie Card -->
+            <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] space-y-4">
+              <h3 class="font-bold text-lg">Ubah Jadi Zombie</h3>
+              <div class="relative">
+                 <input #tozombieInput (input)="tozombieImageUrl.set(tozombieInput.value)" [value]="tozombieImageUrl()"
+                  type="text" placeholder="Tempel URL gambar di sini..."
+                  class="w-full px-5 py-3 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+              </div>
+              <button (click)="performTozombie()" [disabled]="tozombieLoading() || !tozombieImageUrl()"
+                class="w-full py-3 rounded-full font-semibold text-gray-800 transition-all duration-200 ease-in-out bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff] disabled:opacity-50 disabled:cursor-not-allowed">
+                @if (tozombieLoading()) {
+                  <span>Memproses...</span>
+                } @else {
+                  <span>Proses</span>
+                }
+              </button>
+  
+              @if (tozombieError()) {
+                <div class="p-3 rounded-lg bg-red-100 text-red-700 text-sm shadow-[inset_4px_4px_8px_#c9d1d9,inset_-4px_-4px_8px_#f7f9fd]">
+                  {{ tozombieError() }}
+                </div>
+              }
+  
+              @if (tozombieResult(); as result) {
+                <div class="space-y-4">
+                  <p class="text-sm font-medium text-center text-gray-600">Hasil:</p>
+                  <img [ngSrc]="result.result" alt="Tozombie Result" width="300" height="300" class="rounded-lg w-full object-contain shadow-md">
+                   <a [href]="result.result" [attr.download]="'tozombie_result.png'" target="_blank" rel="noopener noreferrer"
+                    class="block text-center w-full py-3 rounded-full font-semibold text-sm text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200 shadow-md">
+                    Unduh Hasil
+                  </a>
+                </div>
+              }
+            </div>
+          </div>
+        } @else if (homeViewMode() === 'ai') {
+          @if (selectedAi(); as ai) {
+            <!-- Chat Interface View -->
+            <div class="w-full flex flex-col flex-grow">
+                <header class="flex items-center justify-between mb-4 relative text-center">
+                    <button (click)="backToAiSelection()" class="absolute left-0 p-2 rounded-full bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div class="flex-1">
+                        <h2 class="text-xl font-bold text-gray-800">{{ ai.name }}</h2>
+                        <p class="text-sm text-gray-500 -mt-1">{{ ai.description }}</p>
+                    </div>
+                </header>
+        
+                <!-- Chat History -->
+                <div class="chat-container flex-grow p-4 space-y-4 overflow-y-auto bg-[#e0e5ec] rounded-2xl shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+                    @for (message of aiChatMessages(); track $index) {
+                        <div class="flex" [class.justify-end]="message.role === 'user'">
+                            <div class="max-w-xs md:max-w-md p-3 rounded-xl" 
+                                [class.bg-blue-500]="message.role === 'user'"
+                                [class.text-white]="message.role === 'user'"
+                                [class.bg-[#e0e5ec]]="message.role === 'ai'"
+                                [class.shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6]]="message.role === 'ai'"
+                                [class.markdown-content]="message.role === 'ai'">
+                                @if (message.role === 'ai') {
+                                    <div [innerHTML]="message.content"></div>
+                                } @else {
+                                    <p>{{ message.content }}</p>
+                                }
+                            </div>
+                        </div>
+                    }
+                    @if (aiChatLoading()) {
+                        <div class="flex">
+                            <div class="max-w-xs md:max-w-md p-3 rounded-xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6]">
+                                <div class="flex items-center space-x-2">
+                                    <span class="block w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                    <span class="block w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                    <span class="block w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+        
+                <!-- Chat Input -->
+                <div class="mt-4">
+                    @if (aiChatError()) {
+                        <div class="mb-2 p-3 rounded-lg bg-red-100 text-red-700 text-sm shadow-[inset_4px_4px_8px_#c9d1d9,inset_-4px_-4px_8px_#f7f9fd]">
+                            {{ aiChatError() }}
+                        </div>
+                    }
+                    <div class="flex items-center gap-2 p-1 bg-[#e0e5ec] rounded-full shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]">
+                        <input #aiInput 
+                              (input)="aiChatInput.set(aiInput.value)" 
+                              [value]="aiChatInput()"
+                              (keyup.enter)="sendChatMessage()"
+                              type="text" 
+                              placeholder="Ketik pesan Anda..."
+                              class="flex-1 min-w-0 px-4 py-2 bg-transparent focus:outline-none text-gray-700">
+                        <button (click)="sendChatMessage()" [disabled]="aiChatLoading() || !aiChatInput()"
+                                class="flex-shrink-0 p-3 rounded-full text-gray-700 transition-all duration-200 ease-in-out bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] disabled:opacity-50 disabled:cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+          } @else {
+            <!-- AI Model Selection View -->
+            <div class="w-full max-w-md">
+                <div class="space-y-6">
+                    @for (ai of aiModels; track ai.id) {
+                        <button (click)="selectAi(ai)" class="w-full text-left p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff] transition-all duration-200 flex items-center space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#e0e5ec] shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff]">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                                    <path [attr.d]="ai.iconSvgPath"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800">{{ ai.name }}</h3>
+                                <p class="text-sm text-gray-600">{{ ai.description }}</p>
+                            </div>
+                        </button>
+                    }
+                </div>
+            </div>
+          }
+        }
+      }
+      @case ('history') {
+        <div class="w-full max-w-md">
+          @if (historyService.history().length > 0) {
+            <div class="flex justify-end mb-4">
+              <button (click)="clearHistory()" class="text-sm text-red-500 font-medium py-2 px-4 rounded-lg bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-shadow duration-200">
+                Hapus Semua
+              </button>
+            </div>
+            <div class="space-y-4">
+              @for (item of historyService.history(); track item.timestamp) {
+                <div class="bg-[#e0e5ec] rounded-2xl p-3 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] flex items-center space-x-3">
+                  <img [ngSrc]="item.thumbnail" alt="Thumbnail" width="64" height="64" class="w-16 h-16 object-cover rounded-lg">
+                  <div class="flex-1 min-w-0">
+                    <p class="font-semibold truncate">{{ item.title }}</p>
+                    <p class="text-xs text-gray-500">{{ item.source }} - {{ formatTimestamp(item.timestamp) }}</p>
+                  </div>
+                  <button (click)="downloadContent(item.url)" class="p-3 rounded-full bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-shadow duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 9.707a1 1 0 011.414 0L9 11.086V3a1 1 0 112 0v8.086l1.293-1.379a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="text-center py-10 px-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 class="mt-2 text-lg font-medium text-gray-800">Riwayat Kosong</h3>
+              <p class="mt-1 text-sm text-gray-500">
+                Belum ada unduhan yang tersimpan.
+              </p>
+            </div>
+          }
+        </div>
+      }
+      @case ('info') {
+        <div class="w-full max-w-md space-y-6">
+          <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]">
+            <h3 class="font-bold text-lg mb-2">Cara Menggunakan</h3>
+            <ol class="list-decimal list-inside text-sm space-y-1 text-gray-600">
+              <li>Temukan video atau audio yang ingin diunduh.</li>
+              <li>Salin URL dari platform tersebut.</li>
+              <li>Tempel URL di kolom pada halaman utama.</li>
+              <li>Klik tombol "Unduh".</li>
+              <li>Pilih format dan kualitas yang Anda inginkan.</li>
+            </ol>
+          </div>
+
+          <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]">
+            <h3 class="font-bold text-lg mb-3">Pertanyaan Umum (FAQ)</h3>
+            <div class="space-y-2">
+              @for (faq of faqs; track $index; let i = $index) {
+                <div>
+                  <button (click)="toggleFaq(i)" class="w-full flex justify-between items-center text-left py-2 focus:outline-none">
+                    <span class="font-semibold text-sm">{{ faq.question }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300" [class.rotate-180]="openFaqIndex() === i" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <div class="overflow-hidden transition-all duration-300 ease-in-out" [class.max-h-40]="openFaqIndex() === i" [class.max-h-0]="openFaqIndex() !== i">
+                    <p class="pt-1 pb-2 text-sm text-gray-600">{{ faq.answer }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="p-4 bg-[#e0e5ec] rounded-2xl shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]">
+            <h3 class="font-bold text-lg mb-2">Disclaimer</h3>
+            <p class="text-sm text-gray-600">
+              Harap hargai hak cipta pemilik konten. Alat ini ditujukan untuk penggunaan pribadi dan mengunduh konten yang diizinkan oleh pemiliknya.
+            </p>
+          </div>
+        </div>
+      }
+    }
+  </main>
+
+  <!-- Bottom Navigation -->
+  <app-bottom-nav [activeTab]="activeView()" (tabSelected)="handleTabSelection($event)"></app-bottom-nav>
+</div>

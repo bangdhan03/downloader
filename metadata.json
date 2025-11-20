@@ -1,0 +1,5 @@
+{
+  "name": "Xyooly Downloader",
+  "description": "A web application to download video and audio content from various platforms, featuring a modern Neumorphism design inspired by native Android applications.",
+  "requestFramePermissions": []
+}

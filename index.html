@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Xyooly Downloader - Unduh Video & Audio</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" type="image/jpeg" href="https://files.catbox.moe/t52zxc.jpg" />
+  <link rel="preconnect" href="https://files.catbox.moe">
+
+  <!-- SEO and Open Graph Tags -->
+  <meta name="description" content="Download video and audio from TikTok, YouTube, Instagram, and more with a clean, mobile-first interface.">
+  <meta name="keywords" content="video downloader, audio downloader, tiktok downloader, youtube downloader, instagram downloader, Xyooly">
+  <meta property="og:title" content="Xyooly Downloader">
+  <meta property="og:description" content="The easiest way to download content from your favorite platforms.">
+  <meta property="og:image" content="https://files.catbox.moe/t52zxc.jpg">
+  <meta property="og:url" content="/">
+  <meta property="og:type" content="website">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    /* Styles for rendered markdown content */
+    .markdown-content ul, .markdown-content ol {
+      padding-left: 1.5rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .markdown-content li {
+      margin-bottom: 0.25rem;
+    }
+    .markdown-content ul {
+      list-style-type: disc;
+    }
+    .markdown-content ol {
+      list-style-type: decimal;
+    }
+    .markdown-content b, .markdown-content strong {
+      font-weight: 600;
+    }
+    .markdown-content code {
+      background-color: #d1d9e6;
+      padding: 0.1rem 0.3rem;
+      border-radius: 0.25rem;
+      font-family: monospace;
+    }
+    .markdown-content pre {
+      background-color: #d1d9e6;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+     .markdown-content p {
+        margin-bottom: 0.5rem;
+     }
+     .markdown-content p:last-child {
+        margin-bottom: 0;
+     }
+  </style>
+<script type="importmap">
+ewogICJpbXBvcnRzIjogewogICAgInJ4anMiOiAiaHR0cHM6Ly9haXN0dWRpb2Nkbi5jb20vcnhqc0BeNy44LjI/Y29uZGl0aW9ucz1lczIwMTUiLAogICAgInJ4anMvb3BlcmF0b3JzIjogImh0dHBzOi8vYWlzdHVkaW9jZG4uY29tL3J4anNAXjcuOC4yL29wZXJhdG9ycz9jb25kaXRpb25zPWVzMjAxNSIsCiAgICAicnhqcy9hamF4IjogImh0dHBzOi8vYWlzdHVkaW9jZG4uY29tL3J4anNAXjcuOC4yL2FqYXg/Y29uZGl0aW9ucz1lczIwMTUiLAogICAgInJ4anMvd2ViU29ja2V0IjogImh0dHBzOi8vYWlzdHVkaW9jZG4uY29tL3J4anNAXjcuOC4yL3dlYlNvY2tldD9jb25kaXRpb25zPWVzMjAxNSIsCiAgICAicnhqcy90ZXN0aW5nIjogImh0dHBzOi8vYWlzdHVkaW9jZG4uY29tL3J4anNAXjcuOC4yL3Rlc3Rpbmc/Y29uZGl0aW9ucz1lczIwMTUiLAogICAgInJ4anMvZmV0Y2giOiAiaHR0cHM6Ly9haXN0dWRpb2Nkbi5jb20vcnhqc0BeNy44LjIvZmV0Y2g/Y29uZGl0aW9ucz1lczIwMTUiLAogICAgIkBhbmd1bGFyL2NvbXBpbGVyIjogImh0dHBzOi8vbmV4dC5lc20uc2gvQGFuZ3VsYXIvY29tcGlsZXJAXjIwLjMuMTI/ZXh0ZXJuYWw9cnhqcyIsCiAgICAiQGFuZ3VsYXMvcGxhdGZvcm0tYnJvd3NlciI6ICJodHRwczovL25leHQuZXNtLnNoL0Bhbmd1bGFyL3BsYXRmb3JtLWJyb3dzZXJAXjIwLjMuMTI/ZXh0ZXJuYWw9cnhqcyIsCiAgICAiQGFuZ3VsYXIvY29tbW9uIjogImh0dHBzOi8vbmV4dC5lc20uc2gvQGFuZ3VsYXIvY29tbW9uZXJAXjIwLjMuMTI/ZXh0ZXJuYWw9cnhqcyIsCiAgICAiQGFuZ3VsYXIvY29tbW9uL2h0dHAiOiAiaHR0cHM6Ly9uZXh0LmVzbS5zaC9AYW5ndWxhci9jb21tb24taHR0cEBeMjAuMy4xMi9odHRwP2V4dGVybmFsPXJ4anMiLAogICAgIkBhbmd1bGFyL2NvcmUiOiAiaHR0cHM6Ly9uZXh0LmVzbS5zaC9AYW5ndWxhci9jb3JlQF4yMC4zLjEyP2V4dGVybmFsPXJ4anMiCiAgfQp9
+</script>
+</head>
+<body class="bg-[#e0e5ec]">
+  <app-root></app-root>
+</body>
+</html>
