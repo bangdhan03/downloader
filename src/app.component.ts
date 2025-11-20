@@ -92,7 +92,7 @@ export class AppComponent {
       case 'info': return 'Bantuan & Informasi';
       case 'home':
         switch(this.homeViewMode()) {
-          case 'downloader': return 'Demonkite Downloader';
+          case 'downloader': return 'Xyooly Downloader';
           case 'search': return 'Pencarian Konten';
           case 'edits': return 'Alat Edit Gambar';
           case 'ai': return 'Chat AI';
@@ -145,7 +145,7 @@ export class AppComponent {
     },
     {
       question: 'Apakah layanan ini gratis?',
-      answer: 'Ya, Demonkite Downloader sepenuhnya gratis untuk penggunaan pribadi.'
+      answer: 'Ya, Xyooly Downloader sepenuhnya gratis untuk penggunaan pribadi.'
     },
     {
       question: 'Bisakah saya mengunduh video privat?',
