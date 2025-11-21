@@ -77,23 +77,23 @@
        class="h-10 w-10 transition-transform group-hover:scale-110"
        [class]="platform.color">
 
-    <!-- BULATAN -->
-    <circle cx="12" cy="12" r="12"></circle>
+    <circle cx="12" cy="12" r="12"/>
 
-    <!-- GARIS PALING ATAS — digeser 1.6px kanan -->
+    <!-- Garis atas — geser halus 0.45px -->
     <path fill="#fff"
-          transform="translate(1.6,0)"
+          transform="translate(0.45,0)"
           d="M18.165 10.274c-.274.385-.798.51-1.182.236-3.53-2.17-8.22-2.82-12.23-1.55a.75.75 0 0 1-.82-.67c-.08-.415.24-.78.65-.87c4.35-1.35 9.39-.64 13.29 1.8a.75.75 0 0 1 .235 1.18z"/>
 
-    <!-- GARIS TENGAH (asli, tidak digeser) -->
+    <!-- Garis tengah (asli, jarak natural) -->
     <path fill="#fff"
           d="M17.803 13.309c-.22.31-.64.408-.948.19c-3.13-1.9-7.02-2.43-11.04-1.34a.625.625 0 0 1-.698-.545.625.625 0 0 1 .545-.698c4.32-1.155 8.52-.57 11.95 1.52a.623.623 0 0 1 .19.948z"/>
 
-    <!-- GARIS BAWAH (asli, tidak digeser) -->
+    <!-- Garis bawah (asli, jarak natural) -->
     <path fill="#fff"
           d="M16.183 16.122a.499.499 0 0 1-.617.208c-2.665-1.635-6.033-1.99-9.983-1.09a.5.5 0 0 1-.562-.438.5.5 0 0 1 .438-.562c4.21-.953 7.848-.562 10.74 1.22a.5.5 0 0 1 .208.617z"/>
   </svg>
 }
+
 
 
                     @case('Mediafire') {
