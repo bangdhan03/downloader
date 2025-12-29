@@ -136,44 +136,29 @@ export class DownloaderService {
     const response: any = await firstValueFrom(this.http.get(apiUrl));
 
     if (!response?.status || !response?.result) {
-      throw new Error("Respons API TikTok tidak valid");
+      throw new Error("Respons API FAA tidak valid");
     }
 
     const data = response.result;
     const options: DownloadOption[] = [];
 
-    // === VIDEO ===
-    if (data.video?.hd) {
+    // === VIDEO (NO WM / DEFAULT) ===
+    if (typeof data.data === "string" && data.data.startsWith("http")) {
       options.push({
-        url: data.video.hd,
-        quality: "HD",
-        format: "video",
-        label: "Video (HD)",
-      });
-    }
-
-    if (data.video?.nowm) {
-      options.push({
-        url: data.video.nowm,
+        url: data.data,
         quality: "SD",
         format: "video",
-        label: "Video (No WM)",
+        label: "Video",
       });
     }
 
-    if (data.video?.wm) {
+    // === AUDIO (MP3) ===
+    if (
+      data.music_info?.url &&
+      typeof data.music_info.url === "string"
+    ) {
       options.push({
-        url: data.video.wm,
-        quality: "SD (WM)",
-        format: "video",
-        label: "Video (Watermark)",
-      });
-    }
-
-    // === AUDIO ===
-    if (data.audio) {
-      options.push({
-        url: data.audio,
+        url: data.music_info.url,
         quality: "128kbps",
         format: "audio",
         label: "Audio (MP3)",
@@ -184,27 +169,20 @@ export class DownloaderService {
       throw new Error("Media tidak ditemukan");
     }
 
-    // === DURASI ===
-    let durationStr: string | undefined;
-    if (typeof data.duration === "number") {
-      const m = Math.floor(data.duration / 60);
-      const s = data.duration % 60;
-      durationStr = `${m}:${s.toString().padStart(2, "0")}`;
-    }
-
     return {
       title: data.title || "Konten TikTok",
-      thumbnail: data.thumbnail,
-      duration: durationStr,
+      thumbnail: data.cover,
+      duration: data.duration, // string: "20 seconds"
       source: "TikTok",
       options,
     };
 
   } catch (err: any) {
     console.error("TikTok FAA API Error:", err);
-    throw new Error(err.message || "Gagal download TikTok");
+    throw new Error(err.message || "Gagal mengunduh TikTok");
   }
 }
+
 
 
   private async fetchYouTube(url: string): Promise<DownloadableContent> {
