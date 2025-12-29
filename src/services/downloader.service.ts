@@ -130,7 +130,7 @@ export class DownloaderService {
   }
 
   private async fetchTikTok(url: string): Promise<DownloadableContent> {
-    const apiUrl = `https://api.vyzen.biz.id/downloader/tiktok?url=${encodeURIComponent(url)}`;
+    const apiUrl = `https://api-faa.my.id/faa/tiktok?url=${encodeURIComponent(url)}`;
     try {
         const response: any = await firstValueFrom(this.http.get(apiUrl));
         if (!response.status || !response.result || !response.result.success || !response.result.data) {
