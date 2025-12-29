@@ -130,56 +130,82 @@ export class DownloaderService {
   }
 
   private async fetchTikTok(url: string): Promise<DownloadableContent> {
-    const apiUrl = `https://zelapioffciall.koyeb.app/download/tiktok?url=${encodeURIComponent(url)}`;
-    try {
-        const response: any = await firstValueFrom(this.http.get(apiUrl));
-        if (!response.status || !response.result || !response.result.success || !response.result.data) {
-            throw new Error('Gagal mengambil data TikTok atau format respons tidak valid.');
-        }
+  const apiUrl = `https://api-faa.my.id/faa/tiktok?url=${encodeURIComponent(url)}`;
 
-        const data = response.result.data;
-        const options: DownloadOption[] = [];
+  try {
+    const response: any = await firstValueFrom(this.http.get(apiUrl));
 
-        // Handle videos
-        if (data.hdplay) {
-            options.push({ url: data.hdplay, quality: 'HD', format: 'video', label: 'Video (HD)' });
-        }
-        if (data.play) {
-            options.push({ url: data.play, quality: 'SD', format: 'video', label: 'Video (SD)' });
-        }
-        if (data.wmplay) {
-            options.push({ url: data.wmplay, quality: 'SD (WM)', format: 'video', label: 'Video (Watermark)' });
-        }
-        
-        // Handle audio
-        if (data.music) {
-            options.push({ url: data.music, quality: '128kbps', format: 'audio', label: 'Audio (MP3)' });
-        }
-
-        if (options.length === 0) {
-            throw new Error('Tidak ada media yang dapat diunduh ditemukan.');
-        }
-        
-        let durationStr: string | undefined;
-        if (data.duration) {
-            const durationSeconds = data.duration;
-            const minutes = Math.floor(durationSeconds / 60);
-            const seconds = durationSeconds % 60;
-            durationStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        return {
-            title: data.title || 'Konten TikTok',
-            thumbnail: data.cover,
-            duration: durationStr,
-            source: 'TikTok',
-            options: options,
-        };
-    } catch (error: any) {
-        console.error('TikTok API Error:', error);
-        throw new Error(error.message || 'Gagal mengunduh dari TikTok. Pastikan URL valid dan publik.');
+    if (!response?.status || !response?.result) {
+      throw new Error("Respons API TikTok tidak valid");
     }
+
+    const data = response.result;
+    const options: DownloadOption[] = [];
+
+    // === VIDEO ===
+    if (data.video?.hd) {
+      options.push({
+        url: data.video.hd,
+        quality: "HD",
+        format: "video",
+        label: "Video (HD)",
+      });
+    }
+
+    if (data.video?.nowm) {
+      options.push({
+        url: data.video.nowm,
+        quality: "SD",
+        format: "video",
+        label: "Video (No WM)",
+      });
+    }
+
+    if (data.video?.wm) {
+      options.push({
+        url: data.video.wm,
+        quality: "SD (WM)",
+        format: "video",
+        label: "Video (Watermark)",
+      });
+    }
+
+    // === AUDIO ===
+    if (data.audio) {
+      options.push({
+        url: data.audio,
+        quality: "128kbps",
+        format: "audio",
+        label: "Audio (MP3)",
+      });
+    }
+
+    if (!options.length) {
+      throw new Error("Media tidak ditemukan");
+    }
+
+    // === DURASI ===
+    let durationStr: string | undefined;
+    if (typeof data.duration === "number") {
+      const m = Math.floor(data.duration / 60);
+      const s = data.duration % 60;
+      durationStr = `${m}:${s.toString().padStart(2, "0")}`;
+    }
+
+    return {
+      title: data.title || "Konten TikTok",
+      thumbnail: data.thumbnail,
+      duration: durationStr,
+      source: "TikTok",
+      options,
+    };
+
+  } catch (err: any) {
+    console.error("TikTok FAA API Error:", err);
+    throw new Error(err.message || "Gagal download TikTok");
   }
+}
+
 
   private async fetchYouTube(url: string): Promise<DownloadableContent> {
     const audioMetaApiUrl = `https://api-faa.my.id/faa/ytmp3?url=${encodeURIComponent(url)}`;
