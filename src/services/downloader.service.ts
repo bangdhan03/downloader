@@ -457,7 +457,7 @@ export class DownloaderService {
   }
 
   async removeBackground(imageUrl: string): Promise<RemoveBgResult> {
-    const apiUrl = `https://api.baguss.xyz/api/edits/removebg?image=${encodeURIComponent(imageUrl)}`;
+    const apiUrl = `https://api.zenzxz.my.id/tools/removebg?image=${encodeURIComponent(imageUrl)}`;
     try {
       const response: any = await firstValueFrom(this.http.get(apiUrl));
       if (response.success && response.cutout) {
