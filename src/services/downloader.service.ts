@@ -387,7 +387,7 @@ export class DownloaderService {
   }
 
   async searchPinterest(query: string): Promise<PinterestResult[]> {
-    const apiUrl = `https://api.baguss.xyz/api/search/pinterest?q=${encodeURIComponent(query)}`;
+    const apiUrl = `https://api.deline.web.id/search/pinterest?q=${encodeURIComponent(query)}`;
     try {
       const response: any = await firstValueFrom(this.http.get(apiUrl));
       if (response.status && response.results) {
