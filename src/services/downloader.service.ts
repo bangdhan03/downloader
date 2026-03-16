@@ -225,7 +225,7 @@ export class DownloaderService {
 
         return {
             title: audioMeta.title || 'Video YouTube',
-            thumbnail: audioMeta.thumbnail || 'https://images.weserv.nl/?url=files.catbox.moe/oqenc7.jpg&w=192&h=192&fit=cover',
+            thumbnail: audioMeta.thumbnail || 'https://images.weserv.nl/?url=files.catbox.moe/ltcwpm.jpg&w=192&h=192&fit=cover',
             duration: durationStr,
             source: 'YouTube',
             options: options
@@ -264,7 +264,7 @@ export class DownloaderService {
 
         const isVideoPost = result.metadata.isVideo;
         const thumbnail = isVideoPost 
-            ? 'https://images.weserv.nl/?url=files.catbox.moe/oqenc7.jpg&w=192&h=192&fit=cover'
+            ? 'https://images.weserv.nl/?url=files.catbox.moe/ltcwpm.jpg&w=192&h=192&fit=cover'
             : result.url[0];
 
         return {
@@ -314,7 +314,7 @@ export class DownloaderService {
 
         return {
             title: result.info.title || 'Video Facebook',
-            thumbnail: result.media.thumbnail || 'https://images.weserv.nl/?url=files.catbox.moe/oqenc7.jpg&w=192&h=192&fit=cover',
+            thumbnail: result.media.thumbnail || 'https://images.weserv.nl/?url=files.catbox.moe/ltcwpm.jpg&w=192&h=192&fit=cover',
             source: 'Facebook',
             options: options
         };
@@ -368,7 +368,7 @@ export class DownloaderService {
 
         return {
             title: data.fileName,
-            thumbnail: 'https://images.weserv.nl/?url=files.catbox.moe/oqenc7.jpg&w=192&h=192&fit=cover',
+            thumbnail: 'https://images.weserv.nl/?url=files.catbox.moe/ltcwpm.jpg&w=192&h=192&fit=cover',
             source: 'Mediafire',
             options: [
                 {
