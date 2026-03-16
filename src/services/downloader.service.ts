@@ -83,12 +83,6 @@ export interface ReminiResult {
   };
 }
 
-export interface SimpleImageEditResult {
-  success: boolean;
-  creator: string;
-  result: string;
-}
-
 export interface AiChatResponse {
   status: boolean;
   creator: string;
@@ -112,57 +106,6 @@ export class DownloaderService {
     return 'unknown';
   }
 
-  async uploadImage(file: File): Promise<string> {
-
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const response: any = await firstValueFrom(
-    this.http.post("https://tmpfiles.org/api/v1/upload", formData)
-  );
-
-  if (!response?.data?.url) {
-    throw new Error("Upload gambar gagal");
-  }
-
-  // tmpfiles url harus di convert supaya direct image
-  const fileUrl = response.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/");
-
-  return fileUrl;
-
-}
-
-  async reminiUpload(file: File): Promise<ReminiResult> {
-
-  const imageUrl = await this.uploadImage(file);
-
-  return this.remini(imageUrl);
-
-}
-
-async tobotakUpload(file: File): Promise<SimpleImageEditResult> {
-
-  const imageUrl = await this.uploadImage(file);
-
-  return this.tobotak(imageUrl);
-
-}
-
-async tofigureUpload(file: File): Promise<SimpleImageEditResult> {
-
-  const imageUrl = await this.uploadImage(file);
-
-  return this.tofigure(imageUrl);
-
-}
-
-async tozombieUpload(file: File): Promise<SimpleImageEditResult> {
-
-  const imageUrl = await this.uploadImage(file);
-
-  return this.tozombie(imageUrl);
-
-}
   
   async fetchDownloadableContent(url: string): Promise<DownloadableContent> {
     const platform = this.detectPlatform(url);
@@ -529,76 +472,6 @@ async tozombieUpload(file: File): Promise<SimpleImageEditResult> {
     } catch (error: any) {
       console.error('TikTok Search API Error:', error);
       throw new Error(error.message || 'Gagal mencari di TikTok.');
-    }
-  }
-
-  async removeBackground(imageUrl: string): Promise<RemoveBgResult> {
-    const apiUrl = `https://api.zenzxz.my.id/tools/removebg?image=${encodeURIComponent(imageUrl)}`;
-    try {
-      const response: any = await firstValueFrom(this.http.get(apiUrl));
-      if (response.success && response.cutout) {
-        return response;
-      }
-      throw new Error('Gagal menghapus latar belakang atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('RemoveBG API Error:', error);
-      throw new Error(error.message || 'Gagal menghapus latar belakang.');
-    }
-  }
-
-  async remini(imageUrl: string): Promise<ReminiResult> {
-    const apiUrl = `https://api.baguss.xyz/api/edits/remini?image=${encodeURIComponent(imageUrl)}`;
-    try {
-      const response: any = await firstValueFrom(this.http.get(apiUrl));
-      if (response.status && response.result) {
-        return response;
-      }
-      throw new Error('Gagal meningkatkan kualitas gambar atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('Remini API Error:', error);
-      throw new Error(error.message || 'Gagal meningkatkan kualitas gambar.');
-    }
-  }
-
-  async tobotak(imageUrl: string): Promise<SimpleImageEditResult> {
-    const apiUrl = `https://api.baguss.xyz/api/edits/tobotak?image=${encodeURIComponent(imageUrl)}`;
-    try {
-      const response: any = await firstValueFrom(this.http.get(apiUrl));
-      if (response.success && response.result) {
-        return response;
-      }
-      throw new Error('Gagal memproses gambar (tobotak) atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('Tobotak API Error:', error);
-      throw new Error(error.message || 'Gagal memproses gambar (tobotak).');
-    }
-  }
-
-  async tofigure(imageUrl: string): Promise<SimpleImageEditResult> {
-    const apiUrl = `https://api.baguss.xyz/api/edits/tofigure?image=${encodeURIComponent(imageUrl)}`;
-    try {
-      const response: any = await firstValueFrom(this.http.get(apiUrl));
-      if (response.success && response.result) {
-        return response;
-      }
-      throw new Error('Gagal memproses gambar (tofigure) atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('Tofigure API Error:', error);
-      throw new Error(error.message || 'Gagal memproses gambar (tofigure).');
-    }
-  }
-
-  async tozombie(imageUrl: string): Promise<SimpleImageEditResult> {
-    const apiUrl = `https://api.baguss.xyz/api/edits/tozombie?image=${encodeURIComponent(imageUrl)}`;
-    try {
-      const response: any = await firstValueFrom(this.http.get(apiUrl));
-      if (response.success && response.result) {
-        return response;
-      }
-      throw new Error('Gagal memproses gambar (tozombie) atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('Tozombie API Error:', error);
-      throw new Error(error.message || 'Gagal memproses gambar (tozombie).');
     }
   }
 
