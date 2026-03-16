@@ -76,7 +76,11 @@ export interface RemoveBgResult {
 export interface ReminiResult {
   status: boolean;
   creator: string;
-  result: string;
+  result: {
+    success: boolean;
+    url: string;
+    size: string;
+  };
 }
 
 export interface SimpleImageEditResult {
