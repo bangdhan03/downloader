@@ -547,18 +547,24 @@ export class DownloaderService {
   }
 
   async chatWithAi(prompt: string): Promise<string> {
-    const apiUrl = `https://api-faa.my.id/faa/ai-realtime?text=${encodeURIComponent(prompt)}`;
-    try {
-      const response: AiChatResponse = await firstValueFrom(this.http.get<AiChatResponse>(apiUrl));
-      if (response.status && response.result) {
-        return response.result;
-      }
-      throw new Error('Gagal mendapatkan respons dari AI atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('AI Chat API Error:', error);
-      throw new Error(error.message || 'Gagal berkomunikasi dengan AI.');
+  const systemPrompt = "Kamu adalah Xyooly AI yang di ciptain oleh bang xyo, yang selalu siap membantu pertanyaan kamu 24 jam non stop";
+  const apiUrl =
+  `https://api.deline.web.id/ai/openai?text=${encodeURIComponent(prompt)}&prompt=${encodeURIComponent(systemPrompt)}`;
+  try {
+
+    const response: any = await firstValueFrom(this.http.get(apiUrl));
+    if (response?.status && response?.result) {
+      return response.result;
     }
+    throw new Error("Format respons AI tidak valid");
+
+  } catch (error: any) {
+
+    console.error("AI API Error:", error);
+    throw new Error(error.message || "Gagal berkomunikasi dengan AI.");
+
   }
+}
 
   async chatWithBardGoogle(prompt: string): Promise<string> {
     const apiUrl = `https://api-faa.my.id/faa/bard-google?text=${encodeURIComponent(prompt)}`;
