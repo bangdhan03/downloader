@@ -386,24 +386,31 @@ export class DownloaderService {
     }
   }
 
-  async searchPinterest(query: string): Promise<PinterestResult[]> {
+  async searchPinterest(query: string): Promise<any[]> {
+
   const apiUrl = `https://api.deline.web.id/search/pinterest?q=${encodeURIComponent(query)}`
 
   try {
+
     const response: any = await firstValueFrom(this.http.get(apiUrl))
-    if (response.status && response.data) {
-  return response.data.map((item: any) => ({
-    id: item.id,
-    title: item.caption || "Pinterest Image",
-    thumbnail: item.image,
-    url: item.source
-  }))
-}
+
+    if (response?.status && response?.data) {
+
+      const mapped = response.data.map((item: any) => ({
+        id: item.id,
+        title: item.caption || "Pinterest Image",
+        thumbnail: item.image,
+        url: item.source
+      }))
+
+      return mapped
     }
-    throw new Error('Gagal mencari di Pinterest atau format respons tidak valid.')
-  } catch (error: any) {
-    console.error('Pinterest API Error:', error)
-    throw new Error(error.message || 'Gagal mencari di Pinterest.')
+
+    return []
+
+  } catch (error) {
+    console.error("Pinterest API Error:", error)
+    return []
   }
 }
 
