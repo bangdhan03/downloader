@@ -392,7 +392,13 @@ export class DownloaderService {
   try {
     const response: any = await firstValueFrom(this.http.get(apiUrl))
     if (response.status && response.data) {
-      return response.data
+  return response.data.map((item: any) => ({
+    id: item.id,
+    title: item.caption || "Pinterest Image",
+    thumbnail: item.image,
+    url: item.source
+  }))
+}
     }
     throw new Error('Gagal mencari di Pinterest atau format respons tidak valid.')
   } catch (error: any) {
