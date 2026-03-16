@@ -576,9 +576,9 @@ export class DownloaderService {
 
     const response: any = await firstValueFrom(this.http.get(apiUrl));
 
-    if (response) {
-      return response.result || response.message || JSON.stringify(response);
-    }
+    if (response?.status && response?.chatUi) {
+  return response.chatUi;
+}
 
     throw new Error("Format respons Bard tidak valid");
 
