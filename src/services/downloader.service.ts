@@ -567,16 +567,26 @@ export class DownloaderService {
 }
 
   async chatWithBardGoogle(prompt: string): Promise<string> {
-    const apiUrl = `https://api-faa.my.id/faa/bard-google?text=${encodeURIComponent(prompt)}`;
-    try {
-      const response: AiChatResponse = await firstValueFrom(this.http.get<AiChatResponse>(apiUrl));
-      if (response.status && response.result) {
-        return response.result;
-      }
-      throw new Error('Gagal mendapatkan respons dari Bard Google atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('Bard Google API Error:', error);
-      throw new Error(error.message || 'Gagal berkomunikasi dengan Bard Google.');
+
+  const apiKey = "sevensoul";
+  const apiUrl =
+  `https://api.termai.cc/api/chat/bard?query=${encodeURIComponent(prompt)}&key=${apiKey}`;
+
+  try {
+
+    const response: any = await firstValueFrom(this.http.get(apiUrl));
+
+    if (response) {
+      return response.result || response.message || JSON.stringify(response);
     }
+
+    throw new Error("Format respons Bard tidak valid");
+
+  } catch (error: any) {
+
+    console.error("Bard API Error:", error);
+    throw new Error(error.message || "Gagal berkomunikasi dengan Bard.");
+
   }
+ }
 }
