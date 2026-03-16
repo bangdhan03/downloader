@@ -111,16 +111,21 @@ export class DownloaderService {
   async uploadImage(file: File): Promise<string> {
 
   const formData = new FormData();
-  formData.append("reqtype", "fileupload");
-  formData.append("fileToUpload", file);
+  formData.append("file", file);
 
-  const response = await firstValueFrom(
-    this.http.post("https://catbox.moe/user/api.php", formData, {
-      responseType: "text"
-    })
+  const response: any = await firstValueFrom(
+    this.http.post("https://tmpfiles.org/api/v1/upload", formData)
   );
 
-  return response;
+  if (!response?.data?.url) {
+    throw new Error("Upload gambar gagal");
+  }
+
+  // tmpfiles url harus di convert supaya direct image
+  const fileUrl = response.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/");
+
+  return fileUrl;
+
 }
 
   async reminiUpload(file: File): Promise<ReminiResult> {
