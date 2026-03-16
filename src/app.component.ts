@@ -260,6 +260,31 @@ export class AppComponent {
     }
   }
 
+  async uploadRemini(event: any): Promise<void> {
+
+  const file = event.target.files[0];
+  if (!file) return;
+
+  this.reminiLoading.set(true);
+  this.reminiResult.set(null);
+  this.reminiError.set(null);
+
+  try {
+
+    const result = await this.downloaderService.reminiUpload(file);
+    this.reminiResult.set(result);
+
+  } catch (err: any) {
+
+    this.reminiError.set(err.message || 'Gagal memproses gambar.');
+
+  } finally {
+
+    this.reminiLoading.set(false);
+
+  }
+}
+  
   async performTobotak(): Promise<void> {
     if (!this.tobotakImageUrl() || this.tobotakLoading()) {
       return;
