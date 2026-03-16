@@ -387,18 +387,19 @@ export class DownloaderService {
   }
 
   async searchPinterest(query: string): Promise<PinterestResult[]> {
-    const apiUrl = `https://api.deline.web.id/search/pinterest?q=${encodeURIComponent(query)}`;
-    try {
-      const response: any = await firstValueFrom(this.http.get(apiUrl));
-      if (response.status && response.results) {
-        return response.results;
-      }
-      throw new Error('Gagal mencari di Pinterest atau format respons tidak valid.');
-    } catch (error: any) {
-      console.error('Pinterest API Error:', error);
-      throw new Error(error.message || 'Gagal mencari di Pinterest.');
+  const apiUrl = `https://api.deline.web.id/search/pinterest?q=${encodeURIComponent(query)}`
+
+  try {
+    const response: any = await firstValueFrom(this.http.get(apiUrl))
+    if (response.status && response.data) {
+      return response.data
     }
+    throw new Error('Gagal mencari di Pinterest atau format respons tidak valid.')
+  } catch (error: any) {
+    console.error('Pinterest API Error:', error)
+    throw new Error(error.message || 'Gagal mencari di Pinterest.')
   }
+}
 
   async searchHappymod(query: string): Promise<HappymodResult[]> {
     const apiUrl = `https://api.baguss.xyz/api/search/happymod?q=${encodeURIComponent(query)}`;
