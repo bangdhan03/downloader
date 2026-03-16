@@ -108,6 +108,53 @@ export class DownloaderService {
     return 'unknown';
   }
 
+  async uploadImage(file: File): Promise<string> {
+
+  const formData = new FormData();
+  formData.append("reqtype", "fileupload");
+  formData.append("fileToUpload", file);
+
+  const response = await firstValueFrom(
+    this.http.post("https://catbox.moe/user/api.php", formData, {
+      responseType: "text"
+    })
+  );
+
+  return response;
+}
+
+  async reminiUpload(file: File): Promise<ReminiResult> {
+
+  const imageUrl = await this.uploadImage(file);
+
+  return this.remini(imageUrl);
+
+}
+
+async tobotakUpload(file: File): Promise<SimpleImageEditResult> {
+
+  const imageUrl = await this.uploadImage(file);
+
+  return this.tobotak(imageUrl);
+
+}
+
+async tofigureUpload(file: File): Promise<SimpleImageEditResult> {
+
+  const imageUrl = await this.uploadImage(file);
+
+  return this.tofigure(imageUrl);
+
+}
+
+async tozombieUpload(file: File): Promise<SimpleImageEditResult> {
+
+  const imageUrl = await this.uploadImage(file);
+
+  return this.tozombie(imageUrl);
+
+}
+  
   async fetchDownloadableContent(url: string): Promise<DownloadableContent> {
     const platform = this.detectPlatform(url);
 
