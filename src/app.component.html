@@ -56,30 +56,50 @@
                   class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 group focus:outline-none">
                   
                   @switch(platform.iconName) {
-                    @case('TikTok') {
-  <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838281225.png" class="h-10">
-}
 
-@case('YouTube') {
-  <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838294191.png" class="h-10">
-}
+  @case('TikTok') {
+    <div class="w-14 h-14 flex items-center justify-center">
+      <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838281225.png"
+           class="w-10 h-10 object-contain">
+    </div>
+  }
 
-@case('Instagram') {
-  <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838238824.png" class="h-10">
-}
+  @case('YouTube') {
+    <div class="w-14 h-14 flex items-center justify-center">
+      <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838294191.png"
+           class="w-10 h-10 object-contain">
+    </div>
+  }
 
-@case('Facebook') {
-  <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838207103.png" class="h-10">
-}
+  @case('Instagram') {
+    <div class="w-14 h-14 flex items-center justify-center">
+      <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838238824.png"
+           class="w-10 h-10 object-contain">
+    </div>
+  }
 
-@case('Spotify') {
-  <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838316855.png" class="h-10">
-}
+  @case('Facebook') {
+    <div class="w-14 h-14 flex items-center justify-center">
+      <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838207103.png"
+           class="w-10 h-10 object-contain">
+    </div>
+  }
 
-@case('Mediafire') {
-  <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838302337.png" class="h-10">
+  @case('Spotify') {
+    <div class="w-14 h-14 flex items-center justify-center">
+      <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838316855.png"
+           class="w-10 h-10 object-contain">
+    </div>
+  }
+
+  @case('Mediafire') {
+    <div class="w-14 h-14 flex items-center justify-center">
+      <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838302337.png"
+           class="w-10 h-10 object-contain">
+    </div>
+  }
+
 }
-                  }
                   
                   <span class="mt-2 text-xs font-medium text-gray-700">{{ platform.name }}</span>
                 </button>
