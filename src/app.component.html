@@ -25,15 +25,25 @@
                 <p class="text-gray-500 mt-4">Unduh video, foto & audio dengan mudah</p>
             </header>
             <div class="relative">
-              <input
-                #urlInput
-                (input)="url.set(urlInput.value)"
-                [value]="url()"
-                type="text"
-                [placeholder]="urlPlaceholder()"
-                class="w-full px-5 py-4 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 transition-shadow duration-300 shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]"
-              >
-            </div>
+
+  <input
+    #urlInput
+    (input)="url.set(urlInput.value)"
+    [value]="url()"
+    type="text"
+    [placeholder]="urlPlaceholder()"
+    class="w-full px-5 py-4 pr-20 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700"
+  >
+
+  <!-- BUTTON PASTE -->
+  <button
+    (click)="pasteFromClipboard()"
+    class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-full bg-blue-500 text-white text-sm"
+  >
+    Paste
+  </button>
+
+</div>
             <button (click)="downloadContent()" [disabled]="loading() || !url()"
               class="w-full py-4 rounded-full font-semibold text-lg text-gray-800 transition-all duration-200 ease-in-out
                     bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]
