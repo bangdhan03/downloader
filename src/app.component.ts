@@ -30,6 +30,15 @@ export class AppComponent {
   url = signal('');
   urlPlaceholder = signal('Tempel URL di sini...');
   loading = signal(false);
+  async pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    this.url.set(text);
+  } catch (err) {
+    alert("Gagal ambil clipboard");
+  }
+}
+  
   downloadResult = signal<DownloadableContent | null>(null);
   error = signal<string | null>(null);
   activeView = signal<'home' | 'history' | 'info'>('home');
