@@ -32,13 +32,15 @@
     [value]="url()"
     type="text"
     [placeholder]="urlPlaceholder()"
-    class="w-full px-5 py-4 pr-20 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700"
+    class="w-full px-5 py-4 pr-28 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
   >
 
-  <!-- BUTTON PASTE -->
+  <!-- TOMBOL PASTE (INI POSISINYA DI DALAM DIV RELATIVE) -->
   <button
     (click)="pasteFromClipboard()"
-    class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-full bg-blue-500 text-white text-sm"
+    class="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-full text-gray-700 text-xs bg-[#e0e5ec]
+    shadow-[-4px_-4px_8px_#ffffff,4px_4px_8px_#a3b1c6]
+    active:shadow-[inset_2px_2px_5px_#a3b1c6,inset_-2px_-2px_5px_#ffffff]"
   >
     Paste
   </button>
