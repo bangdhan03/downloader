@@ -32,20 +32,26 @@
     [value]="url()"
     type="text"
     [placeholder]="urlPlaceholder()"
-    class="w-full px-5 py-4 pr-28 rounded-full bg-[#e0e5ec] focus:outline-none text-gray-700 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+    class="w-full px-5 py-4 pr-20 rounded-full bg-[#e0e5ec] text-gray-700 focus:outline-none
+    shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
   >
 
-  <!-- TOMBOL PASTE (INI POSISINYA DI DALAM DIV RELATIVE) -->
+  <!-- ICON PASTE -->
   <button
     (click)="pasteFromClipboard()"
-    class="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-full text-gray-700 text-xs bg-[#e0e5ec]
-    shadow-[-4px_-4px_8px_#ffffff,4px_4px_8px_#a3b1c6]
-    active:shadow-[inset_2px_2px_5px_#a3b1c6,inset_-2px_-2px_5px_#ffffff]"
+    class="absolute right-2 top-1/2 -translate-y-1/2 
+bg-[#e0e5ec] px-3 py-1 rounded-full text-sm text-gray-700
+shadow-[inset_2px_2px_5px_#a3b1c6,inset_-2px_-2px_5px_#ffffff]"
   >
-    Paste
+    📋
   </button>
 
 </div>
+
+<!-- HINT -->
+<p class="text-xs text-gray-400 mt-2 text-center">
+  Contoh: https://vt.tiktok.com/xxxxx
+</p>
             <button (click)="downloadContent()" [disabled]="loading() || !url()"
               class="w-full py-4 rounded-full font-semibold text-lg text-gray-800 transition-all duration-200 ease-in-out
                     bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]
