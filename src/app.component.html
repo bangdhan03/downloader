@@ -20,6 +20,7 @@
 >
   {{ isDark ? '☀️' : '🌙' }}
 </button>
+    <div
         [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()" 
         [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
         [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi() || homeViewMode() === 'downloader'">
