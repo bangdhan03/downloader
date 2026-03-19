@@ -27,20 +27,8 @@ export class AppComponent {
   private downloaderService = inject(DownloaderService);
   historyService = inject(HistoryService);
 
-  isDark = false;
-
-toggleDark() {
-  this.isDark = !this.isDark;
-
-  if (this.isDark) {
-    document.body.classList.add('dark');
-  } else {
-    document.body.classList.remove('dark');
-  }
-}
-
   url = signal('');
-  urlPlaceholder = signal('Tempel URL di sini...');
+  urlPlaceholder = signal('Tempel tautan disini...');
   loading = signal(false);
   async pasteFromClipboard() {
   try {
