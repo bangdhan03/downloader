@@ -24,36 +24,31 @@
                 <img ngSrc="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773852023039.jpg" alt="Xyooly Downloader Logo" width="100" height="100" class="mx-auto rounded-full shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] p-2" priority>
                 <p class="text-gray-500 mt-4">Unduh video, foto & audio dengan mudah</p>
             </header>
-            <div class="w-full max-w-md space-y-4">
+            <<div class="relative">
 
-  <!-- INPUT + PASTE -->
-  <div class="relative">
-    <input
-      #urlInput
-      (input)="url.set(urlInput.value)"
-      [value]="url()"
-      type="text"
-      [placeholder]="urlPlaceholder()"
-      class="w-full px-5 py-4 pr-16 rounded-full bg-[#e0e5ec] text-gray-700 
-      focus:outline-none transition-all duration-300
-      shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
-    >
+  <input
+    #urlInput
+    (input)="url.set(urlInput.value)"
+    [value]="url()"
+    type="text"
+    [placeholder]="urlPlaceholder()"
+    class="w-full px-5 py-4 pr-20 rounded-full bg-[#e0e5ec] text-gray-700 
+    focus:outline-none
+    shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+  >
 
-    <button
-      (click)="pasteFromClipboard()"
-      class="absolute right-2 top-1/2 -translate-y-1/2 
-      w-10 h-10 flex items-center justify-center
-      rounded-full bg-[#e0e5ec]
-      shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
-    >
-      ⎘
-    </button>
-  </div>
+  <!-- BUTTON PASTE -->
+  <button
+    (click)="pasteFromClipboard()"
+    class="absolute right-2 top-1/2 -translate-y-1/2 
+    px-4 py-1 text-sm font-medium
+    rounded-full bg-[#e0e5ec]
+    shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+  >
+    Paste
+  </button>
 
-  <!-- HINT -->
-  <p class="text-xs text-gray-400 text-center">
-    Contoh: https://vt.tiktok.com/xxxxx
-  </p>
+</div>
 
   <!-- BUTTON UNDUH -->
   <button
