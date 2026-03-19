@@ -10,32 +10,37 @@
   </app-side-nav>
 
   <!-- Main Content -->
-  <main class="pt-20 p-4 flex-grow flex flex-col pb-24 relative">
-
-  <!-- DARK MODE BUTTON -->
-  <button
-  (click)="toggleDark()"
-  class="absolute top-4 right-4 z-50 px-3 py-1 rounded-full bg-[#e0e5ec]
-  shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
->
-  {{ isDark ? '☀️' : '🌙' }}
-</button>
-    <!-- WRAPPER (INI YANG TADI ERROR) -->
-<div
+  <main
+  class="pt-20 p-4 flex-grow flex flex-col pb-24 relative"
   [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
   [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
   [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
 >
 
+  <!-- DARK MODE BUTTON -->
+  <button
+    (click)="toggleDark()"
+    class="absolute top-4 right-4 z-50 px-3 py-1 rounded-full bg-[#e0e5ec]
+    shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+  >
+    {{ isDark ? '☀️' : '🌙' }}
+  </button>
+
   @switch (activeView()) {
+
     @case ('home') {
+
       @if (homeViewMode() === 'downloader') {
 
-        <!-- INPUT FORM -->
+        <!-- WRAPPER -->
         <div class="w-full max-w-md space-y-6">
 
+          <!-- HEADER -->
           <header class="text-center mb-6">
-            <img ngSrc="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773852023039.jpg" />
+            <img
+              ngSrc="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773852023039.jpg"
+              class="mx-auto rounded-full w-24 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+            />
             <p class="text-gray-500 mt-4">
               Unduh video sosmed tanpa watermark
             </p>
@@ -53,7 +58,7 @@
               focus:outline-none shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
             />
 
-            <!-- BUTTON PASTE -->
+            <!-- PASTE -->
             <button
               (click)="pasteFromClipboard()"
               class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 text-sm
@@ -82,11 +87,14 @@
           </button>
 
         </div>
+
       }
+
     }
+
   }
 
-</div>
+</main>
 
       
           <!-- Supported Platforms -->
