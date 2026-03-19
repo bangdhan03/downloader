@@ -9,13 +9,11 @@
     (close)="closeSideNav()">
   </app-side-nav>
 
-  <!-- Main Content -->
-  <main
-  class="pt-20 p-4 flex-grow flex flex-col pb-24 relative"
-  [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
-  [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
-  [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
->
+    <!-- Main Content -->
+  <main class="pt-20 p-4 flex-grow flex flex-col pb-24" 
+        [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()" 
+        [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
+        [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi() || homeViewMode() === 'downloader'">
 
   <!-- DARK MODE BUTTON -->
   <button
