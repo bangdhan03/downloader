@@ -137,7 +137,7 @@ export class AppComponent {
   ];
 
   selectPlatform(platformName: string): void {
-    this.urlPlaceholder.set(`Tempel url ${platformName} disini...`);
+    this.urlPlaceholder.set(`Tempel tautan ${platformName} disini...`);
   }
 
   async downloadContent(urlToDownload?: string): Promise<void> {
