@@ -24,47 +24,55 @@
                 <img ngSrc="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773852023039.jpg" alt="Xyooly Downloader Logo" width="100" height="100" class="mx-auto rounded-full shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] p-2" priority>
                 <p class="text-gray-500 mt-4">Unduh video, foto & audio dengan mudah</p>
             </header>
-            <div class="relative">
+            <div class="w-full max-w-md space-y-4">
 
-  <input
-    #urlInput
-    (input)="url.set(urlInput.value)"
-    [value]="url()"
-    type="text"
-    [placeholder]="urlPlaceholder()"
-    class="w-full px-5 py-4 pr-16 rounded-full bg-[#e0e5ec] text-gray-700 focus:outline-none
-    shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+  <!-- INPUT + PASTE -->
+  <div class="relative">
+    <input
+      #urlInput
+      (input)="url.set(urlInput.value)"
+      [value]="url()"
+      type="text"
+      [placeholder]="urlPlaceholder()"
+      class="w-full px-5 py-4 pr-16 rounded-full bg-[#e0e5ec] text-gray-700 
+      focus:outline-none transition-all duration-300
+      shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+    >
+
+    <button
+      (click)="pasteFromClipboard()"
+      class="absolute right-2 top-1/2 -translate-y-1/2 
+      w-10 h-10 flex items-center justify-center
+      rounded-full bg-[#e0e5ec]
+      shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+    >
+      ⎘
+    </button>
+  </div>
+
+  <!-- HINT -->
+  <p class="text-xs text-gray-400 text-center">
+    Contoh: https://vt.tiktok.com/xxxxx
+  </p>
+
+  <!-- BUTTON UNDUH -->
+  <button
+    (click)="downloadContent()"
+    [disabled]="loading() || !url()"
+    class="w-full py-4 rounded-full font-semibold text-white text-lg
+    bg-gradient-to-r from-blue-500 to-blue-600
+    shadow-[0_8px_20px_rgba(59,130,246,0.4)]
+    active:scale-95 transition-all duration-200
+    disabled:opacity-50 disabled:cursor-not-allowed"
   >
+    @if (loading()) {
+      <span>⏳ Memproses...</span>
+    } @else {
+      <span>Unduh</span>
+    }
+  </button>
 
-  <!-- ICON PASTE -->
-<button
-  (click)="pasteFromClipboard()"
-  class="absolute right-2 top-1/2 -translate-y-1/2 
-  w-10 h-10 flex items-center justify-center
-  rounded-full bg-[#e0e5ec]
-  shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]
-  active:scale-90 transition"
->
-  ⎘
-</button>
 </div>
-
-<!-- HINT -->
-<p class="text-xs text-gray-400 mt-2 text-center">
-  Contoh: https://vt.tiktok.com/xxxxx
-</p>
-            <button (click)="downloadContent()" [disabled]="loading() || !url()"
-              class="w-full py-4 rounded-full font-semibold text-lg text-gray-800 transition-all duration-200 ease-in-out
-                    bg-[#e0e5ec] shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]
-                    active:shadow-[inset_6px_6px_12px_#a3b1c6,inset_-6px_-6px_12px_#ffffff]
-                    disabled:opacity-50 disabled:cursor-not-allowed">
-              @if (loading()) {
-                <span>Memuat...</span>
-              } @else {
-                <span>Unduh</span>
-              }
-            </button>
-          </div>
 
           <!-- Supported Platforms -->
           <div class="mt-8 w-full max-w-md">
