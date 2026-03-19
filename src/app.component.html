@@ -37,15 +37,16 @@
   >
 
   <!-- ICON PASTE -->
-  <button
-    (click)="pasteFromClipboard()"
-    class="absolute right-2 top-1/2 -translate-y-1/2 
-bg-[#e0e5ec] px-3 py-1 rounded-full text-sm text-gray-700
-shadow-[inset_2px_2px_5px_#a3b1c6,inset_-2px_-2px_5px_#ffffff]"
-  >
-    📋
-  </button>
-
+<button
+  (click)="pasteFromClipboard()"
+  class="absolute right-2 top-1/2 -translate-y-1/2 
+  w-10 h-10 flex items-center justify-center
+  rounded-full bg-[#e0e5ec]
+  shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]
+  active:scale-90 transition"
+>
+  ⎘
+</button>
 </div>
 
 <!-- HINT -->
