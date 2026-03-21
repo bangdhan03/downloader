@@ -87,7 +87,12 @@ TikTok downloader online untuk unduh video TikTok HD dengan cepat dan mudah.
 </p>
 
 <app-root></app-root>
-
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then(() => console.log('SW aktif'))
+    .catch(err => console.log('SW error', err));
+}
 </script>
 </body>
 </html>
