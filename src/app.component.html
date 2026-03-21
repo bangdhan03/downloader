@@ -1,10 +1,4 @@
-<div
-class="min-h-screen flex flex-col antialiased"
-[ngClass]="isDark 
-  ? 'bg-[#0f172a] text-white' 
-  : 'bg-[#e0e5ec] text-gray-700'"
->
-
+<div class="min-h-screen flex flex-col text-gray-700 antialiased bg-[#e0e5ec]">
   <!-- New Top Navbar -->
   <app-navbar [title]="pageTitle()" (menuClick)="toggleSideNav()"></app-navbar>
 
@@ -16,24 +10,10 @@ class="min-h-screen flex flex-col antialiased"
   </app-side-nav>
 
      <!-- Main Content -->
-  <main class="pt-20 p-4 flex-grow flex flex-col pb-24"> 
-
-    <!-- DARK MODE BUTTON -->
-<button
-(click)="toggleDark()"
-class="fixed top-20 right-4 z-[9999] px-3 py-2 rounded-full text-lg"
-[ngClass]="isDark 
-  ? 'bg-[#1e293b] text-white' 
-  : 'bg-[#e0e5ec] text-gray-700 shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]'"
->
-{{ isDark ? '☀️' : '🌙' }}
-</button>
-    
-        <div
-  [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
-  [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
-  [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
->
+  <main class="pt-20 p-4 flex-grow flex flex-col pb-24" 
+        [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()" 
+        [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
+        [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi() || homeViewMode() === 'downloader'">
 
     @switch (activeView()) {
       @case ('home') {
@@ -47,27 +27,26 @@ class="fixed top-20 right-4 z-[9999] px-3 py-2 rounded-full text-lg"
             <div class="relative">
 
   <input
-#urlInput
-(input)="url.set(urlInput.value)"
-[value]="url()"
-type="text"
-[placeholder]="urlPlaceholder()"
-class="w-full px-5 py-4 pr-20 rounded-full focus:outline-none
-shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
-[ngClass]="isDark 
-? 'bg-[#1e293b] text-white placeholder-gray-400' 
-: 'bg-[#e0e5ec] text-gray-700'"
->
+    #urlInput
+    (input)="url.set(urlInput.value)"
+    [value]="url()"
+    type="text"
+    [placeholder]="urlPlaceholder()"
+    class="w-full px-5 py-4 pr-20 rounded-full bg-[#e0e5ec] text-gray-700 
+    focus:outline-none
+    shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+  >
 
   <!-- BUTTON PASTE -->
   <button
-(click)="pasteFromClipboard()"
-class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 text-sm font-medium
-rounded-full shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
-[ngClass]="isDark ? 'bg-[#1e293b] text-white' : 'bg-[#e0e5ec]'"
->
-Paste
-</button>
+    (click)="pasteFromClipboard()"
+    class="absolute right-2 top-1/2 -translate-y-1/2 
+    px-4 py-1 text-sm font-medium
+    rounded-full bg-[#e0e5ec]
+    shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+  >
+    Paste
+  </button>
 
 </div>
 
@@ -75,10 +54,11 @@ Paste
   <button
     (click)="downloadContent()"
     [disabled]="loading() || !url()"
-    class="w-full py-4 rounded-full font-semibold text-lg transition-all"
-[ngClass]="isDark 
-? 'bg-[#1e293b] text-white' 
-: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'"
+    class="w-full py-4 rounded-full font-semibold text-white text-lg
+    bg-gradient-to-r from-blue-500 to-blue-600
+    shadow-[0_8px_20px_rgba(59,130,246,0.4)]
+    active:scale-95 transition-all duration-200
+    disabled:opacity-50 disabled:cursor-not-allowed"
   >
     @if (loading()) {
       <span>⏳ Memproses...</span>
@@ -95,12 +75,9 @@ Paste
             <p class="text-center text-sm text-gray-500 mb-4">Platform yang Didukung</p>
             <div class="grid grid-cols-3 gap-4">
               @for (platform of supportedPlatforms; track platform.name) {
-                <button
-type="button"
-(click)="selectPlatform(platform.name)"
-class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl shadow-[...]" 
-[ngClass]="isDark ? 'bg-[#1e293b]' : 'bg-[#e0e5ec]'"
->
+                <button type="button" (click)="selectPlatform(platform.name)"
+                  class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 group focus:outline-none">
+                  
                   @switch(platform.iconName) {
 
   @case('TikTok') {
@@ -135,8 +112,7 @@ class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl s
 
 }
                   
-                  <span class="mt-2 text-xs font-medium"
-[ngClass]="isDark ? 'text-white' : 'text-gray-700'">{{ platform.name }}</span>
+                  <span class="mt-2 text-xs font-medium text-gray-700">{{ platform.name }}</span>
                 </button>
               }
             </div>
