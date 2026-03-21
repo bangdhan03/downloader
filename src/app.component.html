@@ -20,12 +20,12 @@ class="min-h-screen flex flex-col antialiased"
 
     <!-- DARK MODE BUTTON -->
 <button
-  (click)="toggleDark()"
-  class="fixed top-4 right-4 z-50 px-3 py-2 rounded-full
-  bg-[#e0e5ec] text-lg
-  shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+(click)="toggleDark()"
+class="fixed top-4 right-4 z-50 px-3 py-2 rounded-full text-lg
+shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+[ngClass]="isDark ? 'bg-[#1e293b] text-white' : 'bg-[#e0e5ec] text-gray-700'"
 >
-  {{ isDark ? '☀️' : '🌙' }}
+{{ isDark ? '☀️' : '🌙' }}
 </button>
     
         <div
