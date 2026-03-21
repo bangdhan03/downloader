@@ -24,21 +24,6 @@ type HomeViewMode = 'downloader' | 'search' | 'ai';
   imports: [CommonModule, BottomNavComponent, LoaderComponent, NgOptimizedImage, NavbarComponent, SideNavComponent]
 })
 export class AppComponent {
-
-  isDark = false;
-
-toggleDark() {
-  this.isDark = !this.isDark;
-
-  const body = document.body;
-
-  if (this.isDark) {
-    body.classList.add('dark');
-  } else {
-    body.classList.remove('dark');
-  }
-}
-  
   private downloaderService = inject(DownloaderService);
   historyService = inject(HistoryService);
 
