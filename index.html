@@ -19,8 +19,6 @@
   <meta property="og:url" content="https://snapvideo.my.id">
   <meta property="og:type" content="website">
 
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#e0e5ec">
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -87,12 +85,6 @@ TikTok downloader online untuk unduh video TikTok HD dengan cepat dan mudah.
 </p>
 
 <app-root></app-root>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(() => console.log('SW aktif'))
-    .catch(err => console.log('SW error', err));
-}
-</script>
+
 </body>
 </html>
