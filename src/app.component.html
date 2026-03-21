@@ -1,4 +1,7 @@
-<div class="min-h-screen flex flex-col text-gray-700 antialiased bg-[#e0e5ec]">
+<div
+  class="min-h-screen flex flex-col antialiased"
+  [ngClass]="isDark ? 'bg-[#0f172a] text-white' : 'bg-[#e0e5ec] text-gray-700'"
+>
   <!-- New Top Navbar -->
   <app-navbar [title]="pageTitle()" (menuClick)="toggleSideNav()"></app-navbar>
 
@@ -22,9 +25,11 @@
   {{ isDark ? '☀️' : '🌙' }}
 </button>
     
-        [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()" 
-        [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
-        [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi() || homeViewMode() === 'downloader'">
+        <div
+  [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
+  [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
+  [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
+>
 
     @switch (activeView()) {
       @case ('home') {
@@ -43,7 +48,8 @@
     [value]="url()"
     type="text"
     [placeholder]="urlPlaceholder()"
-    class="w-full px-5 py-4 pr-20 rounded-full bg-[#e0e5ec] text-gray-700 
+    class="w-full px-5 py-4 pr-20 rounded-full"
+[ngClass]="isDark ? 'bg-[#1e293b] text-white' : 'bg-[#e0e5ec] text-gray-700'" 
     focus:outline-none
     shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
   >
@@ -65,11 +71,11 @@
   <button
     (click)="downloadContent()"
     [disabled]="loading() || !url()"
-    class="w-full py-4 rounded-full font-semibold text-white text-lg
-    bg-gradient-to-r from-blue-500 to-blue-600
-    shadow-[0_8px_20px_rgba(59,130,246,0.4)]
-    active:scale-95 transition-all duration-200
-    disabled:opacity-50 disabled:cursor-not-allowed"
+    class="w-full py-4 rounded-full font-semibold text-lg
+shadow-[0_8px_20px_rgba(59,130,246,0.4)] ..."
+[ngClass]="isDark 
+? 'bg-[#1e293b] text-white' 
+: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'"
   >
     @if (loading()) {
       <span>⏳ Memproses...</span>
