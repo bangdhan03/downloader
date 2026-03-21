@@ -12,13 +12,16 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": {
-              "base": "./dist",
-              "browser": "."
-            },
-            "browser": "index.tsx",
-            "tsConfig": "tsconfig.json"
-            },
+  "outputPath": {
+    "base": "./dist",
+    "browser": "."
+  },
+  "browser": "index.tsx",
+  "tsConfig": "tsconfig.json",
+  "assets": [
+    "src/assets"
+  ]
+},
           "configurations": {
             "production": {
               "outputHashing": "all"
