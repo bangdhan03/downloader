@@ -1,7 +1,10 @@
 <div
-  class="min-h-screen flex flex-col antialiased"
-  [ngClass]="isDark ? 'bg-[#0f172a] text-white' : 'bg-[#e0e5ec] text-gray-700'"
+class="min-h-screen flex flex-col antialiased"
+[ngClass]="isDark 
+  ? 'bg-[#0f172a] text-white' 
+  : 'bg-[#e0e5ec] text-gray-700'"
 >
+
   <!-- New Top Navbar -->
   <app-navbar [title]="pageTitle()" (menuClick)="toggleSideNav()"></app-navbar>
 
@@ -43,26 +46,27 @@
             <div class="relative">
 
   <input
-  #urlInput
-  (input)="url.set(urlInput.value)"
-  [value]="url()"
-  type="text"
-  [placeholder]="urlPlaceholder()"
-  class="w-full px-5 py-4 pr-20 rounded-full focus:outline-none
-  shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
-  [ngClass]="isDark ? 'bg-[#1e293b] text-white' : 'bg-[#e0e5ec] text-gray-700'"
+#urlInput
+(input)="url.set(urlInput.value)"
+[value]="url()"
+type="text"
+[placeholder]="urlPlaceholder()"
+class="w-full px-5 py-4 pr-20 rounded-full focus:outline-none
+shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+[ngClass]="isDark 
+? 'bg-[#1e293b] text-white placeholder-gray-400' 
+: 'bg-[#e0e5ec] text-gray-700'"
 >
 
   <!-- BUTTON PASTE -->
   <button
-    (click)="pasteFromClipboard()"
-    class="absolute right-2 top-1/2 -translate-y-1/2 
-    px-4 py-1 text-sm font-medium
-    rounded-full bg-[#e0e5ec]
-    shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
-  >
-    Paste
-  </button>
+(click)="pasteFromClipboard()"
+class="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 text-sm font-medium
+rounded-full shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+[ngClass]="isDark ? 'bg-[#1e293b] text-white' : 'bg-[#e0e5ec]'"
+>
+Paste
+</button>
 
 </div>
 
@@ -70,8 +74,7 @@
   <button
     (click)="downloadContent()"
     [disabled]="loading() || !url()"
-    class="w-full py-4 rounded-full font-semibold text-lg
-shadow-[0_8px_20px_rgba(59,130,246,0.4)]"
+    class="w-full py-4 rounded-full font-semibold text-lg transition-all"
 [ngClass]="isDark 
 ? 'bg-[#1e293b] text-white' 
 : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'"
@@ -91,9 +94,12 @@ shadow-[0_8px_20px_rgba(59,130,246,0.4)]"
             <p class="text-center text-sm text-gray-500 mb-4">Platform yang Didukung</p>
             <div class="grid grid-cols-3 gap-4">
               @for (platform of supportedPlatforms; track platform.name) {
-                <button type="button" (click)="selectPlatform(platform.name)"
-                  class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 group focus:outline-none">
-                  
+                <button
+type="button"
+(click)="selectPlatform(platform.name)"
+class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl shadow-[...]" 
+[ngClass]="isDark ? 'bg-[#1e293b]' : 'bg-[#e0e5ec]'"
+>
                   @switch(platform.iconName) {
 
   @case('TikTok') {
@@ -128,7 +134,8 @@ shadow-[0_8px_20px_rgba(59,130,246,0.4)]"
 
 }
                   
-                  <span class="mt-2 text-xs font-medium text-gray-700">{{ platform.name }}</span>
+                  <span class="mt-2 text-xs font-medium"
+[ngClass]="isDark ? 'text-white' : 'text-gray-700'">{{ platform.name }}</span>
                 </button>
               }
             </div>
