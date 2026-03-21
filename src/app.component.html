@@ -11,6 +11,17 @@
 
      <!-- Main Content -->
   <main class="pt-20 p-4 flex-grow flex flex-col pb-24" 
+
+    <!-- DARK MODE BUTTON -->
+<button
+  (click)="toggleDark()"
+  class="fixed top-4 right-4 z-50 px-3 py-2 rounded-full
+  bg-[#e0e5ec] text-lg
+  shadow-[4px_4px_8px_#a3b1c6,-4px_-4px_8px_#ffffff]"
+>
+  {{ isDark ? '☀️' : '🌙' }}
+</button>
+    
         [class.container]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()" 
         [class.mx-auto]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi()"
         [class.items-center]="activeView() !== 'home' || homeViewMode() !== 'ai' || !selectedAi() || homeViewMode() === 'downloader'">
