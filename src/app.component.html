@@ -13,7 +13,7 @@
   </app-side-nav>
 
      <!-- Main Content -->
-  <main class="pt-20 p-4 flex-grow flex flex-col pb-24" 
+  <main class="pt-20 p-4 flex-grow flex flex-col pb-24"> 
 
     <!-- DARK MODE BUTTON -->
 <button
@@ -43,16 +43,15 @@
             <div class="relative">
 
   <input
-    #urlInput
-    (input)="url.set(urlInput.value)"
-    [value]="url()"
-    type="text"
-    [placeholder]="urlPlaceholder()"
-    class="w-full px-5 py-4 pr-20 rounded-full"
-[ngClass]="isDark ? 'bg-[#1e293b] text-white' : 'bg-[#e0e5ec] text-gray-700'" 
-    focus:outline-none
-    shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
-  >
+  #urlInput
+  (input)="url.set(urlInput.value)"
+  [value]="url()"
+  type="text"
+  [placeholder]="urlPlaceholder()"
+  class="w-full px-5 py-4 pr-20 rounded-full focus:outline-none
+  shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]"
+  [ngClass]="isDark ? 'bg-[#1e293b] text-white' : 'bg-[#e0e5ec] text-gray-700'"
+>
 
   <!-- BUTTON PASTE -->
   <button
@@ -72,7 +71,7 @@
     (click)="downloadContent()"
     [disabled]="loading() || !url()"
     class="w-full py-4 rounded-full font-semibold text-lg
-shadow-[0_8px_20px_rgba(59,130,246,0.4)] ..."
+shadow-[0_8px_20px_rgba(59,130,246,0.4)]"
 [ngClass]="isDark 
 ? 'bg-[#1e293b] text-white' 
 : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'"
