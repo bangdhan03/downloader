@@ -19,7 +19,7 @@
       @case ('home') {
         @if (homeViewMode() === 'downloader') {
           <!-- Input Form -->
-          <div class="w-full max-w-md space-y-6">
+        <div class="w-full max-w-md md:max-w-2xl space-y-6">
             <header class="text-center mb-6">
                 <img ngSrc="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773852023039.jpg" alt="Xyooly Downloader Logo" width="100" height="100" class="mx-auto rounded-full shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6] p-2" priority>
                 <p class="text-gray-500 mt-4">Unduh video sosmed tanpa watermark</p>
@@ -73,7 +73,7 @@
           <!-- Supported Platforms -->
           <div class="mt-8 w-full max-w-md">
             <p class="text-center text-sm text-gray-500 mb-4">Platform yang Didukung</p>
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
               @for (platform of supportedPlatforms; track platform.name) {
                 <button type="button" (click)="selectPlatform(platform.name)"
                   class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 group focus:outline-none">
@@ -128,11 +128,11 @@
 
           <!-- Results -->
           @if (loading()) {
-            <div class="mt-8 w-full max-w-md">
+            <div class="mt-8 w-full max-w-md md:max-w-2xl">
               <app-loader></app-loader>
             </div>
           } @else if (downloadResult(); as result) {
-            <div class="mt-8 w-full max-w-md bg-[#e0e5ec] rounded-2xl p-4 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]">
+            <div class="mt-8 w-full max-w-md md:max-w-2xl bg-[#e0e5ec] rounded-2xl p-4 shadow-[-8px_-8px_16px_#ffffff,8px_8px_16px_#a3b1c6]">
               <div class="flex items-center space-x-4">
                 <img [ngSrc]="result.thumbnail" alt="Thumbnail" width="96" height="96" class="w-24 h-24 object-cover rounded-lg shadow-md">
                 <div class="flex-1">
