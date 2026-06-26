@@ -76,38 +76,38 @@
             <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
               @for (platform of supportedPlatforms; track platform.name) {
                 <button type="button" (click)="selectPlatform(platform.name)"
-                  class="flex flex-col items-center justify-center p-4 aspect-square rounded-2xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 group focus:outline-none">
+                  class="flex flex-col items-center justify-center p-2 md:p-3 aspect-square rounded-2xl bg-[#e0e5ec] shadow-[-5px_-5px_10px_#ffffff,5px_5px_10px_#a3b1c6] active:shadow-[inset_4px_4px_8px_#a3b1c6,inset_-4px_-4px_8px_#ffffff] transition-all duration-200 group focus:outline-none">
                   
                   @switch(platform.iconName) {
 
   @case('TikTok') {
     <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773845257016.png"
-         class="w-20 h-20 object-cover rounded-2xl">
+         class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-2xl">
   }
 
   @case('YouTube') {
     <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773845175199.png"
-         class="w-20 h-20 object-cover rounded-2xl">
+         class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-2xl">
   }
 
   @case('Instagram') {
     <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773845235334.png"
-         class="w-20 h-20 object-cover rounded-2xl">
+         class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-2xl">
   }
 
   @case('Facebook') {
     <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773844320821.png"
-         class="w-20 h-20 object-cover rounded-2xl">
+         class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-2xl">
   }
 
   @case('Spotify') {
     <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773838316855.png"
-         class="w-20 h-20 object-cover rounded-2xl">
+         class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-2xl">
   }
 
   @case('Mediafire') {
     <img src="https://raw.githubusercontent.com/bangdhan03/xyooly/main/upload/1773844575816.png"
-         class="w-20 h-20 object-cover rounded-2xl">
+         class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-2xl">
   }
 
 }
